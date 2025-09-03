@@ -73,6 +73,40 @@ END;
 / 
 ```
 
+### Example: FOR Loop with Cursor
+
+PL/SQL provides a shortcut for processing explicit cursors using a FOR loop. The FOR loop automatically opens, fetches, and closes the cursor.
+
+Suppose you want to print all employees in department 20:
+
+```plsql
+FOR rec IN (
+	SELECT employee_id, first_name, last_name, salary
+	FROM employees
+	WHERE department_id = 20
+) LOOP
+	DBMS_OUTPUT.PUT_LINE(rec.employee_id || ': ' || rec.first_name || ' ' || rec.last_name || ', Salary: ' || rec.salary);
+END LOOP;
+```
+
+Or, using a named cursor:
+
+```plsql
+DECLARE
+	CURSOR emp_cur IS
+		SELECT employee_id, first_name, last_name, salary
+		FROM employees
+		WHERE department_id = 30;
+BEGIN
+	FOR rec IN emp_cur LOOP
+		DBMS_OUTPUT.PUT_LINE(rec.employee_id || ': ' || rec.first_name || ' ' || rec.last_name || ', Salary: ' || rec.salary);
+	END LOOP;
+END;
+/ 
+```
+
+The FOR loop simplifies cursor handling and is recommended for most use cases where you need to process each row of a query.
+
 #### Explicit Cursor Attributes
 - `emp_cur%ROWCOUNT` – Number of rows fetched so far
 - `emp_cur%FOUND` – TRUE if last fetch returned a row
