@@ -89,6 +89,97 @@ l_emp_name employees.last_name%TYPE;
 l_emp_record employees%ROWTYPE;
 ```
 
+## 8. Record Types
+
+PL/SQL allows you to define your own composite data types called **records**. A record is a group of related data items, possibly of different types, stored together as a single unit. Records are useful for handling rows of data or grouping related variables.
+
+### Declaring a Record Type
+
+You can define a record type using the `TYPE ... IS RECORD` statement, and then declare variables of that type.
+
+**Example:**
+```plsql
+DECLARE
+  TYPE employee_rec IS RECORD (
+    id        NUMBER,
+    name      VARCHAR2(50),
+    hire_date DATE
+  );
+  l_employee employee_rec;
+BEGIN
+  l_employee.id := 101;
+  l_employee.name := 'Bob';
+  l_employee.hire_date := SYSDATE;
+  DBMS_OUTPUT.PUT_LINE('ID: ' || l_employee.id || ', Name: ' || l_employee.name || ', Hire Date: ' || l_employee.hire_date);
+END;
+/ 
+```
+
+### Using Table-Based Records
+
+You can also use `%ROWTYPE` to declare a record that represents a row in a table:
+
+```plsql
+l_dept_record departments%ROWTYPE;
+```
+
+This record will have fields corresponding to all columns in the `departments` table.
+## 9. Arrays and Collections in PL/SQL
+
+PL/SQL supports arrays through collections. There are three main types:
+
+### 1. VARRAY (Variable-Size Array)
+A VARRAY is an ordered collection of elements with a maximum size. All elements must be of the same data type.
+
+**Example:**
+```plsql
+DECLARE
+  TYPE numbers_varray IS VARRAY(5) OF NUMBER;
+  l_numbers numbers_varray := numbers_varray(10, 20, 30);
+BEGIN
+  l_numbers.EXTEND;
+  l_numbers(4) := 40;
+  DBMS_OUTPUT.PUT_LINE('Fourth element: ' || l_numbers(4));
+END;
+/ 
+```
+
+### 2. Nested Table
+A Nested Table is an unordered collection that can grow in size. It is similar to a database table column that can hold multiple values.
+
+**Example:**
+```plsql
+DECLARE
+  TYPE names_table IS TABLE OF VARCHAR2(50);
+  l_names names_table := names_table('Alice', 'Bob');
+BEGIN
+  l_names.EXTEND;
+  l_names(3) := 'Charlie';
+  FOR i IN 1..l_names.COUNT LOOP
+    DBMS_OUTPUT.PUT_LINE('Name: ' || l_names(i));
+  END LOOP;
+END;
+/ 
+```
+
+### 3. Associative Array (Index-By Table)
+An Associative Array is a set of key-value pairs, where the key can be an integer or string. It is useful for lookups and sparse data.
+
+**Example:**
+```plsql
+DECLARE
+  TYPE salary_table IS TABLE OF NUMBER INDEX BY VARCHAR2(20);
+  l_salary salary_table;
+BEGIN
+  l_salary('Alice') := 50000;
+  l_salary('Bob') := 60000;
+  DBMS_OUTPUT.PUT_LINE('Alice''s Salary: ' || l_salary('Alice'));
+END;
+/ 
+```
+
+---
+
 ## 8. Example: Using Variables in a PL/SQL Block
 
 ```plsql
