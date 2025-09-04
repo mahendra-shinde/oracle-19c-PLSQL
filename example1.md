@@ -89,7 +89,7 @@ INSERT INTO order_details VALUES (102, 5, 1, 8000);
 
 4. Stored procedure to calculate totals
 
-```plsql
+```sql
 CREATE OR REPLACE PROCEDURE update_order_totals IS
 BEGIN
     FOR rec IN (SELECT order_id FROM sales_orders) LOOP
@@ -105,7 +105,7 @@ END;
 
 5. Execute the procedure
 
-```plsql
+```sql
 BEGIN
     update_order_totals;
 END;
