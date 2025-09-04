@@ -95,8 +95,8 @@ BEGIN
     FOR rec IN (SELECT order_id FROM sales_orders) LOOP
         UPDATE sales_orders
         SET
-            total_amount = (SELECT SUM(quantity * rate) FROM order_details WHERE order_id = rec.order_id),
-            total_quantity = (SELECT SUM(quantity) FROM order_details WHERE order_id = rec.order_id)
+            total_amount := (SELECT SUM(quantity * rate) FROM order_details WHERE order_id = rec.order_id),
+            total_quantity := (SELECT SUM(quantity) FROM order_details WHERE order_id = rec.order_id)
         WHERE order_id = rec.order_id;
     END LOOP;
 END;
