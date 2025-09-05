@@ -47,3 +47,36 @@ BEGIN
         INSERT INTO employees (last_name) VALUES (l_names(i));
 END;
 ```
+
+
+## Comparision of Single Record vs Multi Record (Bulk) Fetch
+
+```sql
+DECLARE
+  emp_record employees%rowtype; -- Regular Variable (Single Record only)
+  TYPE emp_collection is TABLE OF employees%ROWTYPE; -- Collection type
+  emp_list emp_collection;
+BEGIN
+    -- Fetch one record in emp_record
+    SELECT * into emp_record from employees where employee_id = 102;
+    -- Fetch multiple records in emp_list
+    SELECT * bulk collect into emp_list from employees where department_id = 50;
+END;
+```
+
+### Explanation
+
+This example demonstrates the difference between fetching a single record and multiple records in PL/SQL:
+
+- **Single Record Fetch:**  
+  `emp_record employees%rowtype;` declares a variable to hold one row from the `employees` table.  
+  `SELECT * INTO emp_record FROM employees WHERE employee_id = 102;` fetches a single employee whose ID is 102.
+
+- **Bulk (Multi-Record) Fetch:**  
+  `TYPE emp_collection IS TABLE OF employees%ROWTYPE;` defines a collection type for multiple rows.  
+  `emp_list emp_collection;` declares a variable of that collection type.  
+  `SELECT * BULK COLLECT INTO emp_list FROM employees WHERE department_id = 50;` fetches all employees in department 50 into the collection.
+
+**Key Point:**  
+Single-record fetch uses a regular variable and `SELECT ... INTO`.  
+Bulk fetch uses a collection and `SELECT ... BULK COLLECT INTO` for efficiency when handling multiple rows.
